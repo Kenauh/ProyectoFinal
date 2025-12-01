@@ -13,9 +13,13 @@ function UserPanel() {
     }, []);
 
     const cargarEspecies = async () => {
-        const r = await fetch("https://proyectofinal-ncbf.onrender.com/api/especies");
-        const datos = await r.json();
-        setEspecies(datos);
+        try {
+            const r = await fetch("https://proyectofinal-ncbf.onrender.com/api/especies");
+            const datos = await r.json();
+            setEspecies(datos);
+        } catch (error) {
+            console.error("Error cargando especies:", error);
+        }
     };
 
     const cerrarSesion = () => {
@@ -52,17 +56,21 @@ function UserPanel() {
             compras: carrito
         };
 
-        const r = await fetch("https://proyectofinal-ncbf.onrender.com/api/compras", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(pedido)
-        });
+        try {
+            const r = await fetch("https://proyectofinal-ncbf.onrender.com/api/compras", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(pedido)
+            });
 
-        if (r.ok) {
-            alert("Pedido generado correctamente ✔");
-            setCarrito([]);
-        } else {
-            alert("Error al registrar pedido");
+            if (r.ok) {
+                alert("Pedido generado correctamente ✔");
+                setCarrito([]);
+            } else {
+                alert("Error al registrar pedido");
+            }
+        } catch (error) {
+            alert("Error de conexión");
         }
     };
 
@@ -83,7 +91,7 @@ function UserPanel() {
 
             <h2 style={styles.title}>Especies disponibles</h2>
 
-            {/* GRID DE PECES */}
+            {/* GRID DE PECES (RESPONSIVO) */}
             <div style={styles.grid}>
                 {especies.map(e => (
                     <div key={e.id_epe} style={styles.card}>
@@ -121,11 +129,11 @@ function UserPanel() {
             {/* CARRITO */}
             {carrito.length > 0 && (
                 <div style={styles.carrito}>
-                    <h2>Carrito</h2>
+                    <h2>Carrito ({carrito.length})</h2>
 
                     {carrito.map((c, i) => (
-                        <div key={i}>
-                            {c.nombre} — {c.kilos} kg — <b>${c.precio_total}</b>
+                        <div key={i} style={{marginBottom: '5px'}}>
+                            {c.nombre} — {c.kilos} kg — <b>${c.precio_total.toLocaleString()}</b>
                         </div>
                     ))}
 
@@ -146,12 +154,14 @@ function UserPanel() {
 }
 
 /* ================================
-   ESTILOS
+   ESTILOS RESPONSIVOS
 ================================= */
 const styles = {
     page: {
         fontFamily: "Arial, sans-serif",
-        paddingBottom: "60px"
+        paddingBottom: "60px",
+        background: "#f5f6fa",
+        minHeight: "100vh"
     },
 
     header: {
@@ -164,9 +174,9 @@ const styles = {
     },
 
     headerLeft: { fontWeight: "bold" },
-    headerRight: { fontWeight: "bold" },
+    headerRight: { fontWeight: "bold", fontSize: "14px" },
 
-    title: { textAlign: "center", marginTop: 20 },
+    title: { textAlign: "center", marginTop: 20, color: "#023e8a" },
 
     topButtons: {
         display: "flex",
@@ -174,10 +184,12 @@ const styles = {
         marginTop: 20
     },
 
+    /* --- GRID INTELIGENTE (Cambio Clave) --- */
     grid: {
         padding: 20,
         display: "grid",
-        gridTemplateColumns: "repeat(3, 1fr)",
+        // Esto hace que se adapte: mínimo 280px por tarjeta, si cabe más, pone más columnas
+        gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
         gap: 20
     },
 
@@ -199,7 +211,7 @@ const styles = {
 
     input: {
         marginTop: 10,
-        width: "100%",
+        width: "90%", // Ajustado para que no toque los bordes
         padding: 8,
         borderRadius: 5,
         border: "1px solid #ccc"
@@ -208,12 +220,14 @@ const styles = {
     carrito: {
         marginTop: 30,
         padding: 20,
-        background: "#f8f9fa",
+        background: "#white",
         borderRadius: 10,
-        width: "80%",
+        width: "90%",
+        maxWidth: "500px", // Tope para PC
         marginLeft: "auto",
         marginRight: "auto",
-        boxShadow: "0 2px 6px rgba(0,0,0,0.1)"
+        boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
+        border: "1px solid #ddd"
     },
 
     btnBlue: {
@@ -235,17 +249,17 @@ const styles = {
         borderRadius: 5,
         cursor: "pointer",
         marginTop: 20,
-        width: "100%"
+        width: "100%",
+        fontWeight: "bold"
     },
 
     btnGray: {
         background: "#6c757d",
         color: "white",
         border: "none",
-        padding: 10,
+        padding: "10px 20px",
         borderRadius: 5,
         cursor: "pointer",
-        minWidth: "150px"
     },
 
     logoutContainer: {

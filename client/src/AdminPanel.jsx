@@ -19,7 +19,7 @@ function AdminPanel() {
         setDatos([]); 
         try {
             let url = '';
-            // Ajusta localhost por tu URL de Render si ya subiste
+            // URLs apuntando a tu servidor en Render
             if (vista === 'ventas') url = 'https://proyectofinal-ncbf.onrender.com/api/compras-admin';
             if (vista === 'compradores') url = 'https://proyectofinal-ncbf.onrender.com/api/compradores';
             if (vista === 'inventario') url = 'https://proyectofinal-ncbf.onrender.com/api/especies'; 
@@ -88,7 +88,7 @@ function AdminPanel() {
                                         <>
                                             <th style={styles.th}>ID</th>
                                             <th style={styles.th}>Comprador</th>
-                                            <th style={styles.th}>Producto</th> {/* Nueva Columna */}
+                                            <th style={styles.th}>Producto</th>
                                             <th style={styles.th}>Total</th>
                                             <th style={styles.th}>Fecha</th>
                                         </>
@@ -116,7 +116,7 @@ function AdminPanel() {
                                 {datos.map((item, index) => (
                                     <tr 
                                         key={index} 
-                                        onClick={() => clickFila(item)} // AQUÍ ESTÁ EL CLIC
+                                        onClick={() => clickFila(item)}
                                         style={{
                                             cursor: vista === 'ventas' ? 'pointer' : 'default',
                                             backgroundColor: 'white',
@@ -131,7 +131,7 @@ function AdminPanel() {
                                                 <td style={styles.td}>
                                                     {item.comprador_relacionado ? item.comprador_relacionado.nombre : 'Eliminado'}
                                                 </td>
-                                                <td style={styles.td}>{item.nombre_especie || 'N/A'}</td> {/* Muestra el producto */}
+                                                <td style={styles.td}>{item.nombre_especie || 'N/A'}</td>
                                                 <td style={styles.td}>${item.precio_total?.toLocaleString()}</td>
                                                 <td style={styles.td}>{new Date(item.fecha).toLocaleDateString()}</td>
                                             </>
@@ -230,9 +230,24 @@ const styles = {
     logoutContainer: { marginTop: 'auto' },
     mainContent: { flex: 1, padding: '30px', overflowY: 'auto' },
     pageTitle: { color: '#023e8a', marginBottom: '20px', borderBottom: '2px solid #ddd', paddingBottom: '10px' },
-    tableWrapper: { background: 'white', borderRadius: '10px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)', overflow: 'hidden', padding: '20px' },
-    table: { width: '100%', borderCollapse: 'collapse' },
-    th: { background: '#0077b6', color: 'white', padding: '12px', textAlign: 'left' },
+    
+    /* --- TABLA RESPONSIVA (Aquí está la magia para celular) --- */
+    tableWrapper: { 
+        background: 'white', 
+        borderRadius: '10px', 
+        boxShadow: '0 4px 6px rgba(0,0,0,0.1)', 
+        padding: '20px',
+        overflowX: 'auto', // Permite deslizar horizontalmente
+        WebkitOverflowScrolling: 'touch', // Suavidad en iPhone
+        width: '100%',
+        boxSizing: 'border-box'
+    },
+    table: { 
+        width: '100%', 
+        borderCollapse: 'collapse', 
+        minWidth: '600px' // Fuerza el ancho para que no se aplaste
+    },
+    th: { background: '#0077b6', color: 'white', padding: '12px', textAlign: 'left', whiteSpace: 'nowrap' },
     td: { padding: '12px', borderBottom: '1px solid #eee', color: '#555' },
 
     /* --- ESTILOS DEL MODAL --- */
@@ -241,7 +256,7 @@ const styles = {
         backgroundColor: 'rgba(0,0,0,0.6)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000
     },
     modalContent: {
-        background: 'white', padding: '25px', borderRadius: '12px', width: '400px',
+        background: 'white', padding: '25px', borderRadius: '12px', width: '90%', maxWidth: '400px',
         boxShadow: '0 5px 15px rgba(0,0,0,0.3)', animation: 'fadeIn 0.2s'
     },
     detalleGrid: {

@@ -11,9 +11,14 @@ function MisPedidos() {
     }, []);
 
     const cargarCompras = async () => {
-        const r = await fetch(`https://proyectofinal-ncbf.onrender.com/api/compras/${usuario.codigo_cpr}`);
-        const datos = await r.json();
-        setCompras(datos);
+        try {
+            // URL de producción (Render)
+            const r = await fetch(`https://proyectofinal-ncbf.onrender.com/api/compras/${usuario.codigo_cpr}`);
+            const datos = await r.json();
+            setCompras(datos);
+        } catch (error) {
+            console.error("Error cargando pedidos:", error);
+        }
     };
 
     return (
@@ -24,7 +29,7 @@ function MisPedidos() {
                 <strong style={styles.headerRight}>SISTEMA LONJA</strong>
             </header>
 
-            {/* BOTÓN */}
+            {/* BOTÓN SUPERIOR */}
             <div style={styles.buttons}>
                 <button onClick={() => navigate("/comprar")} style={styles.btnBlue}>
                     ← Regresar a compras
@@ -33,7 +38,7 @@ function MisPedidos() {
 
             <h2 style={styles.title}>Mis pedidos</h2>
 
-            {/* TABLA */}
+            {/* TABLA CON SCROLL HORIZONTAL (Responsive) */}
             <div style={styles.tableWrapper}>
                 {compras.length === 0 ? (
                     <p style={styles.noData}>No has realizado compras aún.</p>
@@ -41,7 +46,7 @@ function MisPedidos() {
                     <table style={styles.table}>
                         <thead>
                             <tr>
-                                <th style={styles.th}>ID</th>
+                                <th style={styles.th}>Producto</th>
                                 <th style={styles.th}>Precio/Kilo</th>
                                 <th style={styles.th}>Total</th>
                                 <th style={styles.th}>Fecha</th>
@@ -51,10 +56,13 @@ function MisPedidos() {
                         <tbody>
                             {compras.map((c) => (
                                 <tr key={c.id_cmp}>
-                                    <td style={styles.td}>{c.id_cmp}</td>
+                                    <td style={styles.td}>
+                                        {c.nombre_especie || 'Variado'} <br/>
+                                        <small style={{color:'#666'}}>({c.kilos} kg)</small>
+                                    </td>
                                     <td style={styles.td}>${c.precio_kilo_final}</td>
-                                    <td style={styles.td}>${c.precio_total}</td>
-                                    <td style={styles.td}>{new Date(c.fecha).toLocaleString()}</td>
+                                    <td style={styles.td}>${c.precio_total?.toLocaleString()}</td>
+                                    <td style={styles.td}>{new Date(c.fecha).toLocaleDateString()}</td>
                                 </tr>
                             ))}
                         </tbody>
@@ -66,7 +74,7 @@ function MisPedidos() {
 }
 
 /* ================================
-   ESTILOS
+   ESTILOS RESPONSIVOS
 ================================= */
 const styles = {
     page: {
@@ -88,7 +96,7 @@ const styles = {
     },
 
     headerLeft: { fontWeight: "bold" },
-    headerRight: { fontWeight: "bold" },
+    headerRight: { fontWeight: "bold", fontSize: "14px" },
 
     /* ==== TÍTULO ==== */
     title: {
@@ -116,22 +124,28 @@ const styles = {
         fontSize: "15px"
     },
 
-    /* ==== TABLA ==== */
+    /* ==== TABLA RESPONSIVA (Aquí está la magia) ==== */
     tableWrapper: {
-        width: "80%",
+        // En celular usa casi todo el ancho (95%), en PC se limita a 1000px
+        width: "95%",
+        maxWidth: "1000px",
         margin: "30px auto",
-        display: "flex",
-        justifyContent: "center"
+        
+        // Esto permite el scroll horizontal
+        display: "block", 
+        overflowX: "auto", 
+        
+        background: "white",
+        borderRadius: 10,
+        boxShadow: "0 3px 8px rgba(0,0,0,0.15)"
     },
 
     table: {
         width: "100%",
         borderCollapse: "collapse",
-        background: "white",
-        borderRadius: 10,
-        overflow: "hidden",
-        boxShadow: "0 3px 8px rgba(0,0,0,0.15)",
-        textAlign: "center"
+        textAlign: "center",
+        // Esto fuerza a la tabla a no aplastarse, activando el scroll
+        minWidth: "600px" 
     },
 
     th: {
@@ -139,7 +153,8 @@ const styles = {
         background: "#023e8a",
         color: "white",
         fontWeight: "bold",
-        fontSize: "16px"
+        fontSize: "16px",
+        whiteSpace: "nowrap" // Evita que los títulos se partan
     },
 
     td: {
@@ -152,7 +167,8 @@ const styles = {
         textAlign: "center",
         width: "100%",
         fontSize: "18px",
-        color: "#555"
+        color: "#555",
+        padding: "20px"
     }
 };
 
