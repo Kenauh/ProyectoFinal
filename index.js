@@ -163,6 +163,18 @@ app.get("/crear-admin", async (req, res) => {
 });
 
 /* ======================================================
+   RUTA: OBTENER TODOS LOS COMPRADORES (Para Admin)
+====================================================== */
+app.get("/api/compradores", async (req, res) => {
+    try {
+        const compradores = await Comprador.find();
+        res.json(compradores);
+    } catch (error) {
+        res.status(500).json({ error: "Error obteniendo compradores" });
+    }
+});
+
+/* ======================================================
    INICIAR SERVIDOR
 ====================================================== */
 app.listen(process.env.PORT || 3000, () =>

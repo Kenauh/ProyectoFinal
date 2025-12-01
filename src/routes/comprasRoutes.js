@@ -19,6 +19,12 @@ router.post("/", async (req, res) => {
                 codigo_cpr,
                 precio_kilo_final: c.precio_kilo_final,
                 precio_total: c.precio_total,
+                
+                // --- AQUI GUARDAMOS LO NUEVO ---
+                kilos: c.kilos,
+                nombre_especie: c.nombre, // Viene del UserPanel como 'nombre'
+                // -------------------------------
+                
                 fecha: new Date()
             });
 

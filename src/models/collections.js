@@ -65,10 +65,15 @@ const CompraSchema = new mongoose.Schema({
   codigo_cpr: { type: Number, ref: "Comprador", required: true },
   precio_kilo_final: Number,
   precio_total: Number,
+  kilos: Number,
+  nombre_especie: String,
+
+
   fecha: Date
 });
 const Compra = mongoose.model("Compra", CompraSchema);
 
+module.exports = { User, Comprador, Lote, Tipo, Especie, Compra };
 /* ============================
    EXPORTAR
 ============================ */
