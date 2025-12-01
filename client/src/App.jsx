@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './Login';
 import AdminPanel from './AdminPanel';
 import UserPanel from './UserPanel';
+import MisPedidos from "./MisPedidos";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/comprar" element={<UserPanel />} />
         {/* Si ponen una ruta rara, regresarlos al login */}
         <Route path="*" element={<Navigate to="/" />} />
+        <Route path="/mis-pedidos" element={<MisPedidos />} />
       </Routes>
     </BrowserRouter>
   );

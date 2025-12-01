@@ -17,43 +17,53 @@ app.use(express.json());
 connectDB();
 
 /* ==========================================
-   RUTA 1: LOGIN
+   RUTAS DEL PROYECTO
+========================================== */
+app.use("/api/compras", require("./src/routes/comprasRoutes"));
+app.use("/api/especies", require("./src/routes/especiesRoutes"));
+
+/* ==========================================
+   RUTA 1: LOGIN (CORREGIDA)
 ========================================== */
 app.post("/api/login", async (req, res) => {
     const { correo, contraseña } = req.body;
 
     try {
+        // Buscar usuario en colección users
         const user = await User.findOne({ correo });
-
-        if (!user) {
+        if (!user)
             return res.status(404).json({ mensaje: "Usuario no encontrado" });
-        }
 
-        if (user.contraseña !== contraseña) {
+        // Verificar contraseña
+        if (user.contraseña !== contraseña)
             return res.status(401).json({ mensaje: "Contraseña incorrecta" });
-        }
+
+        // Buscar datos del comprador (para obtener codigo_cpr)
+        const comprador = await Comprador.findOne({ correo });
 
         res.json({
             mensaje: "Login exitoso",
             nombre: user.nombre,
-            rol: user.rol
+            rol: user.rol,
+            codigo_cpr: comprador ? comprador.codigo_cpr : null
         });
 
     } catch (error) {
+        console.error(error);
         res.status(500).json({ mensaje: "Error interno del servidor" });
     }
 });
 
 /* ==========================================
-   RUTA 2: OBTENER COMPRAS (AdminPanel)
+   RUTA 2: OBTENER TODAS LAS COMPRAS (ADMIN)
 ========================================== */
-app.get("/api/compras", async (req, res) => {
+app.get("/api/compras-admin", async (req, res) => {
     try {
         const compras = await Compra.find();
 
         const comprasConComprador = [];
 
-        // Como No puedes usar populate con Number, se hace manual
+        // Asignar manualmente datos del comprador
         for (let compra of compras) {
             const comprador = await Comprador.findOne({
                 codigo_cpr: compra.codigo_cpr
@@ -61,7 +71,7 @@ app.get("/api/compras", async (req, res) => {
 
             comprasConComprador.push({
                 ...compra._doc,
-                comprador_relacionado: comprador ? comprador : null
+                comprador_relacionado: comprador ?? null
             });
         }
 
@@ -74,7 +84,7 @@ app.get("/api/compras", async (req, res) => {
 });
 
 /* ==========================================
-   RUTA 3: CREAR ADMIN (Solo pruebas)
+   RUTA 3: CREAR ADMIN (SOLO PRUEBAS)
 ========================================== */
 app.get("/crear-admin", async (req, res) => {
     try {
@@ -93,7 +103,9 @@ app.get("/crear-admin", async (req, res) => {
     }
 });
 
-// Servidor
+/* ==========================================
+   INICIAR SERVIDOR
+========================================== */
 app.listen(process.env.PORT || 3000, () =>
     console.log(`Servidor Backend corriendo en puerto ${process.env.PORT || 3000}`)
 );
