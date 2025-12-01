@@ -1,4 +1,7 @@
-/* Archivo: index.js */
+/* ======================================================
+   Archivo: index.js — Backend principal
+====================================================== */
+
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
@@ -9,36 +12,41 @@ const { User, Compra, Comprador } = require("./src/models/collections");
 
 const app = express();
 
-// Middleware
+/* ======================================================
+   MIDDLEWARE
+====================================================== */
 app.use(cors());
 app.use(express.json());
 
-// Conexión a la BD
+// Archivos estáticos (imágenes de especies)
+app.use("/img", express.static("public/img"));
+
+/* ======================================================
+   CONEXIÓN A LA BASE DE DATOS
+====================================================== */
 connectDB();
 
-/* ==========================================
-   RUTAS DEL PROYECTO
-========================================== */
+/* ======================================================
+   RUTAS EXTERNAS
+====================================================== */
 app.use("/api/compras", require("./src/routes/comprasRoutes"));
 app.use("/api/especies", require("./src/routes/especiesRoutes"));
 
-/* ==========================================
-   RUTA 1: LOGIN (CORREGIDA)
-========================================== */
+/* ======================================================
+   RUTA: LOGIN
+====================================================== */
 app.post("/api/login", async (req, res) => {
     const { correo, contraseña } = req.body;
 
     try {
-        // Buscar usuario en colección users
         const user = await User.findOne({ correo });
         if (!user)
             return res.status(404).json({ mensaje: "Usuario no encontrado" });
 
-        // Verificar contraseña
         if (user.contraseña !== contraseña)
             return res.status(401).json({ mensaje: "Contraseña incorrecta" });
 
-        // Buscar datos del comprador (para obtener codigo_cpr)
+        // Buscar comprador relacionado con ese correo
         const comprador = await Comprador.findOne({ correo });
 
         res.json({
@@ -54,28 +62,79 @@ app.post("/api/login", async (req, res) => {
     }
 });
 
-/* ==========================================
-   RUTA 2: OBTENER TODAS LAS COMPRAS (ADMIN)
-========================================== */
+/* ======================================================
+   RUTA: REGISTRO (Crear User + Comprador)
+====================================================== */
+app.post("/api/register", async (req, res) => {
+    try {
+        const {
+            nombre,
+            apellido_paterno,
+            apellido_materno,
+            direccion,
+            correo,
+            contraseña
+        } = req.body;
+
+        // Validar si el correo ya existe
+        const existe = await User.findOne({ correo });
+        if (existe) {
+            return res.status(400).json({ mensaje: "El correo ya está registrado" });
+        }
+
+        // Crear usuario
+        const nuevoUsuario = new User({
+            nombre,
+            correo,
+            contraseña,
+            rol: "cliente"
+        });
+
+        await nuevoUsuario.save();
+
+        // Generar código único para comprador
+        const codigo_cpr = Math.floor(Math.random() * 9000) + 1000;
+
+        // Crear comprador
+        const comprador = new Comprador({
+            codigo_cpr,
+            nombre,
+            apellido_paterno,
+            apellido_materno,
+            direccion,
+            correo
+        });
+
+        await comprador.save();
+
+        res.json({ mensaje: "Usuario registrado correctamente" });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ mensaje: "Error en el registro" });
+    }
+});
+
+/* ======================================================
+   RUTA: LISTA DE COMPRAS PARA ADMIN PANEL
+====================================================== */
 app.get("/api/compras-admin", async (req, res) => {
     try {
         const compras = await Compra.find();
+        const result = [];
 
-        const comprasConComprador = [];
-
-        // Asignar manualmente datos del comprador
         for (let compra of compras) {
             const comprador = await Comprador.findOne({
                 codigo_cpr: compra.codigo_cpr
             });
 
-            comprasConComprador.push({
+            result.push({
                 ...compra._doc,
-                comprador_relacionado: comprador ?? null
+                comprador_relacionado: comprador || null
             });
         }
 
-        res.json(comprasConComprador);
+        res.json(result);
 
     } catch (error) {
         console.error(error);
@@ -83,9 +142,9 @@ app.get("/api/compras-admin", async (req, res) => {
     }
 });
 
-/* ==========================================
-   RUTA 3: CREAR ADMIN (SOLO PRUEBAS)
-========================================== */
+/* ======================================================
+   RUTA: CREAR ADMIN (SOLO PARA PRUEBAS)
+====================================================== */
 app.get("/crear-admin", async (req, res) => {
     try {
         const admin = new User({
@@ -103,9 +162,9 @@ app.get("/crear-admin", async (req, res) => {
     }
 });
 
-/* ==========================================
+/* ======================================================
    INICIAR SERVIDOR
-========================================== */
+====================================================== */
 app.listen(process.env.PORT || 3000, () =>
     console.log(`Servidor Backend corriendo en puerto ${process.env.PORT || 3000}`)
 );

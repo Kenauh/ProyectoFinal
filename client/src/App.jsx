@@ -4,6 +4,8 @@ import Login from './Login';
 import AdminPanel from './AdminPanel';
 import UserPanel from './UserPanel';
 import MisPedidos from "./MisPedidos";
+import Register from "./Register";
+
 
 function App() {
   return (
@@ -15,6 +17,7 @@ function App() {
         {/* Si ponen una ruta rara, regresarlos al login */}
         <Route path="*" element={<Navigate to="/" />} />
         <Route path="/mis-pedidos" element={<MisPedidos />} />
+        <Route path="/register" element={<Register />} />
       </Routes>
     </BrowserRouter>
   );

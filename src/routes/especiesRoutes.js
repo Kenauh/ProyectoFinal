@@ -2,29 +2,26 @@ const express = require("express");
 const router = express.Router();
 const { Especie, Lote, Tipo } = require("../models/collections");
 
-// Obtener especies con sus lotes y tipos
+// Devuelve especies con lote y tipo incluidos
 router.get("/", async (req, res) => {
     try {
         const especies = await Especie.find();
-
         const resultado = [];
 
-        for (let esp of especies) {
-            const lote = await Lote.findOne({ id_lte: esp.id_lte });
-            const tipo = await Tipo.findOne({ id_tpo: esp.id_tpo });
+        for (const e of especies) {
+            const lote = await Lote.findOne({ id_lte: e.id_lte });
+            const tipo = await Tipo.findOne({ id_tpo: e.id_tpo });
 
             resultado.push({
-                ...esp._doc,
-                id_lte: lote || null,
-                id_tpo: tipo || null
+                ...e._doc,
+                id_lte: lote,
+                id_tpo: tipo
             });
         }
 
         res.json(resultado);
-
     } catch (error) {
-        console.error("ERROR en /api/especies:", error);
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ error: "Error cargando especies" });
     }
 });
 
