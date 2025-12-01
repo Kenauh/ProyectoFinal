@@ -1,81 +1,99 @@
-/* Archivo: index.js (Backend) */
+/* Archivo: index.js */
 require("dotenv").config();
 const express = require("express");
-const cors = require("cors"); 
+const cors = require("cors");
 const connectDB = require("./src/config/db");
+
+// Modelos
+const { User, Compra, Comprador } = require("./src/models/collections");
 
 const app = express();
 
-app.use(cors()); 
+// Middleware
+app.use(cors());
 app.use(express.json());
 
+// Conexión a la BD
 connectDB();
 
-// ==========================================
-// IMPORTACIÓN DE MODELOS (Corrección aquí)
-// Importamos User y Compra UNA SOLA VEZ
-// ==========================================
-const { User, Compra } = require("./src/models/collections");
-
-// ==========================================
-// RUTA 1: LOGIN
-// ==========================================
+/* ==========================================
+   RUTA 1: LOGIN
+========================================== */
 app.post("/api/login", async (req, res) => {
     const { correo, contraseña } = req.body;
-    try {
-        // Busca usuario por correo
-        const user = await User.findOne({ correo });
-        if (!user) return res.status(404).json({ mensaje: "Usuario no encontrado" });
 
-        // Valida contraseña
+    try {
+        const user = await User.findOne({ correo });
+
+        if (!user) {
+            return res.status(404).json({ mensaje: "Usuario no encontrado" });
+        }
+
         if (user.contraseña !== contraseña) {
             return res.status(401).json({ mensaje: "Contraseña incorrecta" });
         }
 
-        // Responde con el rol
-        res.json({ 
-            mensaje: "Login exitoso", 
-            nombre: user.nombre, 
-            rol: user.rol 
+        res.json({
+            mensaje: "Login exitoso",
+            nombre: user.nombre,
+            rol: user.rol
         });
 
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ mensaje: "Error interno del servidor" });
     }
 });
 
-// ==========================================
-// RUTA 2: OBTENER COMPRAS (Para el Admin)
-// ==========================================
+/* ==========================================
+   RUTA 2: OBTENER COMPRAS (AdminPanel)
+========================================== */
 app.get("/api/compras", async (req, res) => {
     try {
-        // Buscamos todas las compras y llenamos los datos del comprador
-        const compras = await Compra.find().populate("comprador_relacionado", "nombre apellido_paterno");
-        res.json(compras);
+        const compras = await Compra.find();
+
+        const comprasConComprador = [];
+
+        // Como No puedes usar populate con Number, se hace manual
+        for (let compra of compras) {
+            const comprador = await Comprador.findOne({
+                codigo_cpr: compra.codigo_cpr
+            });
+
+            comprasConComprador.push({
+                ...compra._doc,
+                comprador_relacionado: comprador ? comprador : null
+            });
+        }
+
+        res.json(comprasConComprador);
+
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: "Error al obtener compras" });
+        res.status(500).json({ mensaje: "Error al obtener compras" });
     }
 });
 
-// ==========================================
-// RUTA 3: CREAR ADMIN (Temporal para pruebas)
-// ==========================================
+/* ==========================================
+   RUTA 3: CREAR ADMIN (Solo pruebas)
+========================================== */
 app.get("/crear-admin", async (req, res) => {
     try {
-        const nuevoAdmin = new User({
+        const admin = new User({
             nombre: "Jefe Lonja",
             correo: "admin@lonja.com",
             contraseña: "123",
             rol: "admin"
         });
-        await nuevoAdmin.save();
-        res.send("¡Usuario Admin creado con éxito!");
+
+        await admin.save();
+        res.send("Administrador creado ✔");
+
     } catch (error) {
-        res.send("Error (probablemente ya existe): " + error.message);
+        res.status(400).send("Error: " + error.message);
     }
 });
 
+// Servidor
 app.listen(process.env.PORT || 3000, () =>
-  console.log("Servidor Backend en puerto " + (process.env.PORT || 3000))
+    console.log(`Servidor Backend corriendo en puerto ${process.env.PORT || 3000}`)
 );

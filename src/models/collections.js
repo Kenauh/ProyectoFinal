@@ -7,11 +7,7 @@ const UserSchema = new mongoose.Schema({
   nombre: { type: String, required: true },
   correo: { type: String, required: true, unique: true },
   contraseña: { type: String, required: true },
-  rol: {
-    type: String,
-    enum: ["cliente", "admin"],
-    default: "cliente"
-  }
+  rol: { type: String, enum: ["cliente", "admin"], default: "cliente" }
 });
 const User = mongoose.model("User", UserSchema);
 
@@ -41,7 +37,7 @@ const LoteSchema = new mongoose.Schema({
 const Lote = mongoose.model("Lote", LoteSchema);
 
 /* ============================
-   TIPOS DE ESPECIE
+   TIPOS
 ============================ */
 const TipoSchema = new mongoose.Schema({
   id_tpo: { type: Number, required: true, unique: true },
@@ -55,16 +51,8 @@ const Tipo = mongoose.model("Tipo", TipoSchema);
 const EspecieSchema = new mongoose.Schema({
   id_epe: { type: Number, required: true, unique: true },
   nombre: String,
-  id_lte: {
-    type: Number,
-    ref: "Lote",
-    required: true
-  },
-  id_tpo: {
-    type: Number,
-    ref: "Tipo",
-    required: true
-  },
+  id_lte: { type: Number, ref: "Lote", required: true },
+  id_tpo: { type: Number, ref: "Tipo", required: true },
   imagen: String
 });
 const Especie = mongoose.model("Especie", EspecieSchema);
@@ -74,11 +62,7 @@ const Especie = mongoose.model("Especie", EspecieSchema);
 ============================ */
 const CompraSchema = new mongoose.Schema({
   id_cmp: { type: Number, required: true, unique: true },
-  codigo_cpr: {
-    type: Number,
-    ref: "Comprador",
-    required: true
-  },
+  codigo_cpr: { type: Number, ref: "Comprador", required: true },
   precio_kilo_final: Number,
   precio_total: Number,
   fecha: Date
@@ -86,13 +70,6 @@ const CompraSchema = new mongoose.Schema({
 const Compra = mongoose.model("Compra", CompraSchema);
 
 /* ============================
-   EXPORTAR TODOS LOS MODELOS
+   EXPORTAR
 ============================ */
-module.exports = {
-  User,
-  Comprador,
-  Lote,
-  Tipo,
-  Especie,
-  Compra
-};
+module.exports = { User, Comprador, Lote, Tipo, Especie, Compra };
