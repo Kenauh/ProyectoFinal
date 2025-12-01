@@ -20,9 +20,9 @@ function AdminPanel() {
         try {
             let url = '';
             // Ajusta localhost por tu URL de Render si ya subiste
-            if (vista === 'ventas') url = 'http://localhost:3000/api/compras-admin';
-            if (vista === 'compradores') url = 'http://localhost:3000/api/compradores';
-            if (vista === 'inventario') url = 'http://localhost:3000/api/especies'; 
+            if (vista === 'ventas') url = 'https://proyectofinal-ncbf.onrender.com/api/compras-admin';
+            if (vista === 'compradores') url = 'https://proyectofinal-ncbf.onrender.com/api/compradores';
+            if (vista === 'inventario') url = 'https://proyectofinal-ncbf.onrender.com/api/especies'; 
 
             const respuesta = await fetch(url);
             if (respuesta.ok) {

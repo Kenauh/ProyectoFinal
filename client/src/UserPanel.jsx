@@ -13,7 +13,7 @@ function UserPanel() {
     }, []);
 
     const cargarEspecies = async () => {
-        const r = await fetch("http://localhost:3000/api/especies");
+        const r = await fetch("https://proyectofinal-ncbf.onrender.com/api/especies");
         const datos = await r.json();
         setEspecies(datos);
     };
@@ -52,7 +52,7 @@ function UserPanel() {
             compras: carrito
         };
 
-        const r = await fetch("http://localhost:3000/api/compras", {
+        const r = await fetch("https://proyectofinal-ncbf.onrender.com/api/compras", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(pedido)
@@ -88,7 +88,7 @@ function UserPanel() {
                 {especies.map(e => (
                     <div key={e.id_epe} style={styles.card}>
                         <img
-                            src={`http://localhost:3000/img/${e.imagen}`}
+                            src={`https://proyectofinal-ncbf.onrender.com/img/${e.imagen}`}
                             style={styles.img}
                             alt={e.nombre}
                         />

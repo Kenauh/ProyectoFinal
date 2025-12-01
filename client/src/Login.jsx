@@ -12,7 +12,7 @@ function Login() {
         setError("");
 
         try {
-            const r = await fetch("http://localhost:3000/api/login", {
+            const r = await fetch("https://proyectofinal-ncbf.onrender.com/api/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ correo, contraseña: password })

@@ -11,7 +11,7 @@ function MisPedidos() {
     }, []);
 
     const cargarCompras = async () => {
-        const r = await fetch(`http://localhost:3000/api/compras/${usuario.codigo_cpr}`);
+        const r = await fetch(`https://proyectofinal-ncbf.onrender.com/api/compras/${usuario.codigo_cpr}`);
         const datos = await r.json();
         setCompras(datos);
     };
