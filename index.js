@@ -1,11 +1,7 @@
-/* ======================================================
-   Archivo: index.js — Backend SEGURO (Encriptado)
-====================================================== */
-
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const bcrypt = require("bcrypt"); // <--- LIBRERÍA DE SEGURIDAD
+const bcrypt = require("bcrypt"); 
 const connectDB = require("./src/config/db");
 
 // Importamos TODOS los modelos
@@ -32,7 +28,7 @@ app.use("/api/compras", require("./src/routes/comprasRoutes"));
 app.use("/api/especies", require("./src/routes/especiesRoutes"));
 
 /* ======================================================
-   RUTA 1: LOGIN (CON SEGURIDAD)
+   RUTA 1: LOGIN
 ====================================================== */
 app.post("/api/login", async (req, res) => {
     const { correo, contraseña } = req.body;
@@ -41,7 +37,6 @@ app.post("/api/login", async (req, res) => {
         const user = await User.findOne({ correo });
         if (!user) return res.status(404).json({ mensaje: "Usuario no encontrado" });
 
-        // VERIFICACIÓN DE CONTRASEÑA ENCRIPTADA
         const esCorrecta = await bcrypt.compare(contraseña, user.contraseña);
         if (!esCorrecta) {
             return res.status(401).json({ mensaje: "Contraseña incorrecta" });
@@ -63,7 +58,7 @@ app.post("/api/login", async (req, res) => {
 });
 
 /* ======================================================
-   RUTA 2: REGISTRO (CON ENCRIPTACIÓN)
+   RUTA 2: REGISTRO
 ====================================================== */
 app.post("/api/register", async (req, res) => {
     try {
@@ -72,20 +67,18 @@ app.post("/api/register", async (req, res) => {
         const existe = await User.findOne({ correo });
         if (existe) return res.status(400).json({ mensaje: "El correo ya está registrado" });
 
-        // 1. ENCRIPTAR CONTRASEÑA
-        const salt = await bcrypt.genSalt(10); // Genera "sal" aleatoria
+        const salt = await bcrypt.genSalt(10); 
         const passwordHash = await bcrypt.hash(contraseña, salt); // Crea el hash
 
-        // 2. Guardar Usuario con la contraseña encriptada
         const nuevoUsuario = new User({ 
             nombre, 
             correo, 
-            contraseña: passwordHash, // <--- GUARDAMOS EL HASH, NO EL TEXTO
+            contraseña: passwordHash, 
             rol: "cliente" 
         });
         await nuevoUsuario.save();
 
-        // 3. Crear Comprador
+     
         const codigo_cpr = Math.floor(Math.random() * 9000) + 1000;
         const comprador = new Comprador({ codigo_cpr, nombre, apellido_paterno, apellido_materno, direccion, correo });
         await comprador.save();
@@ -116,22 +109,21 @@ app.get("/api/compras-admin", async (req, res) => {
 });
 
 /* ======================================================
-   RUTA 4: CREAR ADMIN (CON ENCRIPTACIÓN)
-   Importante: Úsala para regenerar al admin con contraseña segura
+   RUTA 4: CREAR ADMIN 
 ====================================================== */
 app.get("/crear-admin", async (req, res) => {
     try {
-        // Borramos si existe el anterior (para actualizar la contraseña a segura)
+       
         await User.deleteOne({ correo: "admin@lonja.com" });
 
-        // Encriptamos la contraseña "123"
+       
         const salt = await bcrypt.genSalt(10);
         const passwordHash = await bcrypt.hash("123", salt);
 
         const admin = new User({
             nombre: "Jefe Lonja",
             correo: "admin@lonja.com",
-            contraseña: passwordHash, // <--- Guardamos encriptada
+            contraseña: passwordHash, 
             rol: "admin"
         });
 
@@ -156,16 +148,15 @@ app.get("/api/compradores", async (req, res) => {
 });
 
 app.get("/crear-productos", async (req, res) => {
-    // ... (Tu código de crear productos se mantiene igual, no necesita cambios)
+   
     res.send("Productos verificados.");
 });
 /* ======================================================
    RUTA DE LIMPIEZA: BORRAR USUARIOS ANTIGUOS
-   (Ejecútala una vez para quitar los usuarios con contraseña plana)
 ====================================================== */
 app.get("/limpiar-usuarios", async (req, res) => {
     try {
-        // Borra TODOS los usuarios y compradores
+     
         await User.deleteMany({});
         await Comprador.deleteMany({});
         

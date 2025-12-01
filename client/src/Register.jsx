@@ -73,7 +73,6 @@ function Register() {
     );
 }
 
-/* ESTILOS (mismos que LOGIN) */
 const styles = {
     page: {
         background: "#f5f6fa",

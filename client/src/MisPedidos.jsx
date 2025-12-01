@@ -38,7 +38,7 @@ function MisPedidos() {
 
             <h2 style={styles.title}>Mis pedidos</h2>
 
-            {/* TABLA CON SCROLL HORIZONTAL (Responsive) */}
+            {/* TABLA CON SCROLL HORIZONTAL  */}
             <div style={styles.tableWrapper}>
                 {compras.length === 0 ? (
                     <p style={styles.noData}>No has realizado compras aún.</p>
@@ -124,14 +124,14 @@ const styles = {
         fontSize: "15px"
     },
 
-    /* ==== TABLA RESPONSIVA (Aquí está la magia) ==== */
+    /* ==== TABLA RESPONSIVA==== */
     tableWrapper: {
-        // En celular usa casi todo el ancho (95%), en PC se limita a 1000px
+    
         width: "95%",
         maxWidth: "1000px",
         margin: "30px auto",
         
-        // Esto permite el scroll horizontal
+       
         display: "block", 
         overflowX: "auto", 
         
@@ -144,7 +144,7 @@ const styles = {
         width: "100%",
         borderCollapse: "collapse",
         textAlign: "center",
-        // Esto fuerza a la tabla a no aplastarse, activando el scroll
+
         minWidth: "600px" 
     },
 
@@ -154,7 +154,7 @@ const styles = {
         color: "white",
         fontWeight: "bold",
         fontSize: "16px",
-        whiteSpace: "nowrap" // Evita que los títulos se partan
+        whiteSpace: "nowrap" 
     },
 
     td: {

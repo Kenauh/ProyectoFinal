@@ -28,8 +28,10 @@ function UserPanel() {
     };
 
     const agregarCarrito = (especie, kilos) => {
-        if (kilos <= 0) return;
-
+        if (!kilos || kilos <= 0) {
+            alert("⚠️ Por favor, ingresa una cantidad de kilos válida (mayor a 0).");
+            return;
+        }
         const precioKilo = especie.id_lte?.precio_kilo_salida || 0;
         const total = kilos * precioKilo;
 
@@ -184,11 +186,9 @@ const styles = {
         marginTop: 20
     },
 
-    /* --- GRID INTELIGENTE (Cambio Clave) --- */
     grid: {
         padding: 20,
         display: "grid",
-        // Esto hace que se adapte: mínimo 280px por tarjeta, si cabe más, pone más columnas
         gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
         gap: 20
     },
@@ -211,7 +211,7 @@ const styles = {
 
     input: {
         marginTop: 10,
-        width: "90%", // Ajustado para que no toque los bordes
+        width: "90%",
         padding: 8,
         borderRadius: 5,
         border: "1px solid #ccc"
@@ -223,7 +223,7 @@ const styles = {
         background: "#white",
         borderRadius: 10,
         width: "90%",
-        maxWidth: "500px", // Tope para PC
+        maxWidth: "500px", 
         marginLeft: "auto",
         marginRight: "auto",
         boxShadow: "0 2px 6px rgba(0,0,0,0.1)",

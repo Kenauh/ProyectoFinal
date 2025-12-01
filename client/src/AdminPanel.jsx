@@ -6,7 +6,7 @@ function AdminPanel() {
     const [datos, setDatos] = useState([]);
     const [menuAbierto, setMenuAbierto] = useState(true);
     
-    // ESTADO PARA EL MODAL DE DETALLES
+  
     const [pedidoSeleccionado, setPedidoSeleccionado] = useState(null);
 
     const navigate = useNavigate();
@@ -19,7 +19,7 @@ function AdminPanel() {
         setDatos([]); 
         try {
             let url = '';
-            // URLs apuntando a tu servidor en Render
+            // URLs apuntando al servidor en Render
             if (vista === 'ventas') url = 'https://proyectofinal-ncbf.onrender.com/api/compras-admin';
             if (vista === 'compradores') url = 'https://proyectofinal-ncbf.onrender.com/api/compradores';
             if (vista === 'inventario') url = 'https://proyectofinal-ncbf.onrender.com/api/especies'; 
@@ -39,7 +39,7 @@ function AdminPanel() {
         navigate('/');
     };
 
-    // Función para abrir el modal (solo si estamos en vista de ventas)
+    // Función para abrir el modal 
     const clickFila = (item) => {
         if (vista === 'ventas') {
             setPedidoSeleccionado(item);
@@ -231,26 +231,24 @@ const styles = {
     mainContent: { flex: 1, padding: '30px', overflowY: 'auto' },
     pageTitle: { color: '#023e8a', marginBottom: '20px', borderBottom: '2px solid #ddd', paddingBottom: '10px' },
     
-    /* --- TABLA RESPONSIVA (Aquí está la magia para celular) --- */
     tableWrapper: { 
         background: 'white', 
         borderRadius: '10px', 
         boxShadow: '0 4px 6px rgba(0,0,0,0.1)', 
         padding: '20px',
-        overflowX: 'auto', // Permite deslizar horizontalmente
-        WebkitOverflowScrolling: 'touch', // Suavidad en iPhone
+        overflowX: 'auto', 
+        WebkitOverflowScrolling: 'touch', 
         width: '100%',
         boxSizing: 'border-box'
     },
     table: { 
         width: '100%', 
         borderCollapse: 'collapse', 
-        minWidth: '600px' // Fuerza el ancho para que no se aplaste
+        minWidth: '600px' 
     },
     th: { background: '#0077b6', color: 'white', padding: '12px', textAlign: 'left', whiteSpace: 'nowrap' },
     td: { padding: '12px', borderBottom: '1px solid #eee', color: '#555' },
 
-    /* --- ESTILOS DEL MODAL --- */
     modalOverlay: {
         position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
         backgroundColor: 'rgba(0,0,0,0.6)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000
