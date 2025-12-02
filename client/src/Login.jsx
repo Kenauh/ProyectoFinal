@@ -39,10 +39,11 @@ function Login() {
         <div style={styles.page}>
             {/* HEADER */}
             <header style={styles.header}>
-                <strong style={styles.headerLeft}>LOGIN</strong>
-                <strong style={styles.headerRight}>SISTEMA LONJA</strong>
+                <strong style={styles.headerLeft}>SISTEMA LONJA ⚓</strong>
+                <strong style={styles.headerRight}>LOGIN</strong>
             </header>
 
+            {/* === CONTENEDOR CENTRADO === */}
             <div style={styles.container}>
                 <div style={styles.card}>
                     <h2 style={styles.title}>Bienvenido</h2>
@@ -92,7 +93,9 @@ const styles = {
     page: {
         background: "#f5f6fa",
         minHeight: "100vh",
-        fontFamily: "Arial, sans-serif"
+        fontFamily: "Arial, sans-serif",
+        display: "flex",
+        flexDirection: "column",
     },
 
     header: {
@@ -107,25 +110,29 @@ const styles = {
     headerLeft: { fontWeight: "bold" },
     headerRight: { fontWeight: "bold" },
 
+    /* === CENTRAR TODO === */
     container: {
+        flex: 1,
         display: "flex",
         justifyContent: "center",
-        marginTop: 60
+        alignItems: "center",
+        paddingBottom: "60px",
     },
 
+    /* === TARJETA AZUL === */
     card: {
-        background: "white",
-        padding: "30px",
+        background: "rgba(0, 119, 182, 0.92)",
+        padding: "35px",
         borderRadius: 12,
         width: "330px",
-        boxShadow: "0 3px 8px rgba(0,0,0,0.15)"
+        boxShadow: "0 4px 12px rgba(0,0,0,0.25)",
+        color: "white"
     },
 
     title: {
         textAlign: "center",
         fontSize: "24px",
         marginBottom: "20px",
-        color: "#023e8a",
         fontWeight: "bold"
     },
 
@@ -138,12 +145,12 @@ const styles = {
     input: {
         padding: "12px",
         borderRadius: 6,
-        border: "1px solid #ccc",
+        border: "none",
         fontSize: "16px"
     },
 
     btnBlue: {
-        background: "#0077b6",
+        background: "#03045e",
         color: "white",
         border: "none",
         padding: "12px",
@@ -156,14 +163,14 @@ const styles = {
     registerLink: {
         marginTop: "10px",
         textAlign: "center",
-        color: "#0077b6",
+        color: "white",
         cursor: "pointer",
         fontWeight: "bold",
         textDecoration: "underline"
     },
 
     error: {
-        color: "red",
+        color: "#ffcccc",
         fontSize: "14px",
         textAlign: "center"
     }

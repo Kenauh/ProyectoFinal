@@ -43,9 +43,10 @@ function Register() {
         <div style={styles.page}>
             <header style={styles.header}>
                 <strong style={styles.headerLeft}>REGISTRO</strong>
-                <strong style={styles.headerRight}>SISTEMA LONJA</strong>
+                <strong style={styles.headerRight}>SISTEMA LONJA ⚓</strong>
             </header>
 
+            {/* === CONTENEDOR CENTRADO === */}
             <div style={styles.container}>
                 <div style={styles.card}>
                     <h2 style={styles.title}>Crear cuenta</h2>
@@ -77,7 +78,9 @@ const styles = {
     page: {
         background: "#f5f6fa",
         minHeight: "100vh",
-        fontFamily: "Arial, sans-serif"
+        fontFamily: "Arial, sans-serif",
+        display: "flex",
+        flexDirection: "column"
     },
 
     header: {
@@ -92,26 +95,30 @@ const styles = {
     headerLeft: { fontWeight: "bold" },
     headerRight: { fontWeight: "bold" },
 
+    /* === CENTRAR VERTICAL + HORIZONTAL === */
     container: {
+        flex: 1,
         display: "flex",
         justifyContent: "center",
-        marginTop: 50
+        alignItems: "center",
+        paddingBottom: "60px"
     },
 
+    /* === TARJETA AZUL === */
     card: {
-        background: "white",
-        padding: "30px",
+        background: "rgba(0, 119, 182, 0.92)",
+        padding: "35px",
         borderRadius: 12,
-        width: "350px",
-        boxShadow: "0 3px 8px rgba(0,0,0,0.15)"
+        width: "360px",
+        boxShadow: "0 4px 12px rgba(0,0,0,0.25)",
+        color: "white"
     },
 
     title: {
         textAlign: "center",
         marginBottom: 20,
-        color: "#023e8a",
         fontSize: "24px",
-        fontWeight: "bold"
+        fontWeight: "bold",
     },
 
     form: {
@@ -123,12 +130,12 @@ const styles = {
     input: {
         padding: "12px",
         borderRadius: 6,
-        border: "1px solid #ccc",
+        border: "none",
         fontSize: "15px"
     },
 
     btnBlue: {
-        background: "#0077b6",
+        background: "#03045e",
         color: "white",
         border: "none",
         padding: "12px",
@@ -142,13 +149,13 @@ const styles = {
         marginTop: "10px",
         textAlign: "center",
         cursor: "pointer",
-        color: "#0077b6",
+        color: "white",
         fontWeight: "bold",
         textDecoration: "underline"
     },
 
     error: {
-        color: "red",
+        color: "#ffcccc",
         textAlign: "center",
         fontSize: "14px"
     }

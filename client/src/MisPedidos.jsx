@@ -12,8 +12,9 @@ function MisPedidos() {
 
     const cargarCompras = async () => {
         try {
-            // URL de producción (Render)
-            const r = await fetch(`https://proyectofinal-ncbf.onrender.com/api/compras/${usuario.codigo_cpr}`);
+            const r = await fetch(
+                `https://proyectofinal-ncbf.onrender.com/api/compras/${usuario.codigo_cpr}`
+            );
             const datos = await r.json();
             setCompras(datos);
         } catch (error) {
@@ -21,131 +22,153 @@ function MisPedidos() {
         }
     };
 
+    const cerrarSesion = () => {
+        localStorage.removeItem("usuario");
+        navigate("/");
+    };
+
     return (
         <div style={styles.page}>
-            {/* HEADER */}
+            
+            {/* ==== HEADER ==== */}
             <header style={styles.header}>
-                <strong style={styles.headerLeft}>PEDIDOS</strong>
-                <strong style={styles.headerRight}>SISTEMA LONJA</strong>
+                <div style={styles.headerLeft}>SISTEMA LONJA ⚓</div>
+
+                <button style={styles.headerBtnCenter} onClick={() => navigate("/comprar")}>
+                    Tienda
+                </button>
+
+                <button style={styles.headerBtnRight} onClick={cerrarSesion}>
+                    Cerrar sesión 🚪
+                </button>
             </header>
 
-            {/* BOTÓN SUPERIOR */}
-            <div style={styles.buttons}>
-                <button onClick={() => navigate("/comprar")} style={styles.btnBlue}>
-                    ← Regresar a compras
-                </button>
-            </div>
+            <div style={styles.content}>
+                <h2 style={styles.title}>Mis pedidos</h2>
 
-            <h2 style={styles.title}>Mis pedidos</h2>
-
-            {/* TABLA CON SCROLL HORIZONTAL  */}
-            <div style={styles.tableWrapper}>
-                {compras.length === 0 ? (
-                    <p style={styles.noData}>No has realizado compras aún.</p>
-                ) : (
-                    <table style={styles.table}>
-                        <thead>
-                            <tr>
-                                <th style={styles.th}>Producto</th>
-                                <th style={styles.th}>Precio/Kilo</th>
-                                <th style={styles.th}>Total</th>
-                                <th style={styles.th}>Fecha</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            {compras.map((c) => (
-                                <tr key={c.id_cmp}>
-                                    <td style={styles.td}>
-                                        {c.nombre_especie || 'Variado'} <br/>
-                                        <small style={{color:'#666'}}>({c.kilos} kg)</small>
-                                    </td>
-                                    <td style={styles.td}>${c.precio_kilo_final}</td>
-                                    <td style={styles.td}>${c.precio_total?.toLocaleString()}</td>
-                                    <td style={styles.td}>{new Date(c.fecha).toLocaleDateString()}</td>
+                <div style={styles.tableWrapper}>
+                    {compras.length === 0 ? (
+                        <p style={styles.noData}>No has realizado compras aún.</p>
+                    ) : (
+                        <table style={styles.table}>
+                            <thead>
+                                <tr>
+                                    <th style={styles.th}>Producto</th>
+                                    <th style={styles.th}>Precio/Kilo</th>
+                                    <th style={styles.th}>Total</th>
+                                    <th style={styles.th}>Fecha</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                )}
+                            </thead>
+
+                            <tbody>
+                                {compras.map((c) => (
+                                    <tr key={c.id_cmp}>
+                                        <td style={styles.td}>
+                                            {c.nombre_especie || "Variado"}
+                                            <br />
+                                            <small style={{ color: "#666" }}>
+                                                ({c.kilos} kg)
+                                            </small>
+                                        </td>
+                                        <td style={styles.td}>${c.precio_kilo_final}</td>
+                                        <td style={styles.td}>
+                                            ${c.precio_total?.toLocaleString()}
+                                        </td>
+                                        <td style={styles.td}>
+                                            {new Date(c.fecha).toLocaleDateString()}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    )}
+                </div>
             </div>
         </div>
     );
 }
 
 /* ================================
-   ESTILOS RESPONSIVOS
-================================= */
+          ESTILOS AJUSTADOS
+================================ */
 const styles = {
     page: {
         fontFamily: "Arial, sans-serif",
         background: "#f5f6fa",
         minHeight: "100vh",
-        paddingBottom: "40px"
+        width: "100%",        // <--- Asegura ancho total
+        boxSizing: "border-box"
     },
 
-    /* ==== HEADER ==== */
     header: {
+        width: "100%",        // <--- HEADER AL 100%
         background: "#023e8a",
         color: "white",
-        padding: "15px 25px",
+        padding: "12px 25px",
         display: "flex",
-        justifyContent: "space-between",
         alignItems: "center",
-        fontSize: "20px"
+        justifyContent: "space-between",
+        position: "sticky",
+        top: 0,
+        zIndex: 10,
+        boxSizing: "border-box"
     },
 
-    headerLeft: { fontWeight: "bold" },
-    headerRight: { fontWeight: "bold", fontSize: "14px" },
+    headerLeft: {
+        fontWeight: "bold",
+        fontSize: "20px",
+    },
 
-    /* ==== TÍTULO ==== */
+    headerBtnCenter: {
+        background: "#0077b6",
+        padding: "10px 18px",
+        border: "none",
+        borderRadius: 6,
+        color: "white",
+        fontSize: "15px",
+        cursor: "pointer",
+    },
+
+    headerBtnRight: {
+        background: "#d00000",
+        padding: "10px 18px",
+        border: "none",
+        borderRadius: 6,
+        color: "white",
+        fontSize: "15px",
+        cursor: "pointer",
+    },
+
+    /* === CONTENIDO 100% === */
+    content: {
+        width: "100%",          // <--- sección ocupa todo el ancho
+        padding: "20px 25px",   // igual que el header
+        boxSizing: "border-box"
+    },
+
     title: {
         textAlign: "center",
-        marginTop: 25,
+        marginTop: 15,
         fontSize: "26px",
         fontWeight: "bold",
-        color: "#023e8a"
+        color: "#023e8a",
     },
 
-    /* ==== BOTÓN SUPERIOR ==== */
-    buttons: {
-        display: "flex",
-        justifyContent: "center",
-        marginTop: 20
-    },
-
-    btnBlue: {
-        background: "#0077b6",
-        color: "white",
-        border: "none",
-        padding: "12px 20px",
-        borderRadius: 6,
-        cursor: "pointer",
-        fontSize: "15px"
-    },
-
-    /* ==== TABLA RESPONSIVA==== */
     tableWrapper: {
-    
-        width: "95%",
+        width: "100%",          // <--- al 100%
         maxWidth: "1000px",
         margin: "30px auto",
-        
-       
-        display: "block", 
-        overflowX: "auto", 
-        
         background: "white",
         borderRadius: 10,
-        boxShadow: "0 3px 8px rgba(0,0,0,0.15)"
+        overflowX: "auto",
+        boxShadow: "0 3px 8px rgba(0,0,0,0.15)",
+        boxSizing: "border-box"
     },
 
     table: {
-        width: "100%",
+        width: "100%",          // <--- tabla al 100%
         borderCollapse: "collapse",
-        textAlign: "center",
-
-        minWidth: "600px" 
+        minWidth: "600px",
     },
 
     th: {
@@ -153,23 +176,22 @@ const styles = {
         background: "#023e8a",
         color: "white",
         fontWeight: "bold",
-        fontSize: "16px",
-        whiteSpace: "nowrap" 
+        whiteSpace: "nowrap",
     },
 
     td: {
         padding: "12px",
         borderBottom: "1px solid #ddd",
-        fontSize: "15px"
+        fontSize: "15px",
+        textAlign: "center",
     },
 
     noData: {
+        padding: "20px",
         textAlign: "center",
-        width: "100%",
         fontSize: "18px",
         color: "#555",
-        padding: "20px"
-    }
+    },
 };
 
 export default MisPedidos;
