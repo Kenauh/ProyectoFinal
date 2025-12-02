@@ -29,16 +29,20 @@ function MisPedidos() {
 
     return (
         <div style={styles.page}>
-            
-            {/* ==== HEADER ==== */}
             <header style={styles.header}>
                 <div style={styles.headerLeft}>SISTEMA LONJA ⚓</div>
 
-                <button style={styles.headerBtnCenter} onClick={() => navigate("/comprar")}>
+                <button
+                    style={styles.headerBtnCenter}
+                    onClick={() => navigate("/comprar")}
+                >
                     Tienda
                 </button>
 
-                <button style={styles.headerBtnRight} onClick={cerrarSesion}>
+                <button
+                    style={styles.headerBtnRight}
+                    onClick={cerrarSesion}
+                >
                     Cerrar sesión 🚪
                 </button>
             </header>
@@ -88,20 +92,17 @@ function MisPedidos() {
     );
 }
 
-/* ================================
-          ESTILOS AJUSTADOS
-================================ */
 const styles = {
     page: {
         fontFamily: "Arial, sans-serif",
         background: "#f5f6fa",
         minHeight: "100vh",
-        width: "100%",        // <--- Asegura ancho total
+        width: "100%",
         boxSizing: "border-box"
     },
 
     header: {
-        width: "100%",        // <--- HEADER AL 100%
+        width: "100%",
         background: "#023e8a",
         color: "white",
         padding: "12px 25px",
@@ -139,10 +140,9 @@ const styles = {
         cursor: "pointer",
     },
 
-    /* === CONTENIDO 100% === */
     content: {
-        width: "100%",          // <--- sección ocupa todo el ancho
-        padding: "20px 25px",   // igual que el header
+        width: "100%",
+        padding: "20px 25px",
         boxSizing: "border-box"
     },
 
@@ -155,7 +155,7 @@ const styles = {
     },
 
     tableWrapper: {
-        width: "100%",          // <--- al 100%
+        width: "100%",
         maxWidth: "1000px",
         margin: "30px auto",
         background: "white",
@@ -166,7 +166,7 @@ const styles = {
     },
 
     table: {
-        width: "100%",          // <--- tabla al 100%
+        width: "100%",
         borderCollapse: "collapse",
         minWidth: "600px",
     },

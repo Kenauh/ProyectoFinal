@@ -31,6 +31,7 @@ function UserPanel() {
             alert("⚠️ Ingresa una cantidad de kilos válida.");
             return;
         }
+
         const precioKilo = especie.id_lte?.precio_kilo_salida || 0;
         const total = kilos * precioKilo;
 
@@ -77,8 +78,6 @@ function UserPanel() {
 
     return (
         <div style={styles.page}>
-
-            {/* ==== HEADER ==== */}
             <header style={styles.header}>
                 <div style={styles.headerLeft}>SISTEMA LONJA ⚓</div>
 
@@ -94,7 +93,6 @@ function UserPanel() {
                 </button>
             </header>
 
-            {/* ==== CONTENIDO ==== */}
             <div style={styles.mainContent}>
                 <h2 style={styles.pageTitle}>Especies disponibles</h2>
 
@@ -152,15 +150,12 @@ function UserPanel() {
     );
 }
 
-/* ============================================
-   ESTILOS CORREGIDOS (HEADER + CONTENEDOR)
-============================================ */
 const styles = {
     page: {
         background: "#f4f6f9",
         minHeight: "100vh",
         fontFamily: "Arial, sans-serif",
-        width: "100%",
+        width: "100%"
     },
 
     header: {
@@ -202,7 +197,6 @@ const styles = {
         fontSize: "15px"
     },
 
-    /* === CORRECCIÓN CLAVE === */
     mainContent: {
         padding: "0px 25px",
         width: "100%",

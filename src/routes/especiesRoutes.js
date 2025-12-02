@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const { Especie, Lote, Tipo } = require("../models/collections");
 
-// Devuelve especies con lote y tipo incluidos
 router.get("/", async (req, res) => {
     try {
         const especies = await Especie.find();

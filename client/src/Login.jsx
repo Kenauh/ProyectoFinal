@@ -37,13 +37,11 @@ function Login() {
 
     return (
         <div style={styles.page}>
-            {/* HEADER */}
             <header style={styles.header}>
                 <strong style={styles.headerLeft}>SISTEMA LONJA ⚓</strong>
                 <strong style={styles.headerRight}>LOGIN</strong>
             </header>
 
-            {/* === CONTENEDOR CENTRADO === */}
             <div style={styles.container}>
                 <div style={styles.card}>
                     <h2 style={styles.title}>Bienvenido</h2>
@@ -86,9 +84,6 @@ function Login() {
     );
 }
 
-/* ================================
-   ESTILOS
-================================= */
 const styles = {
     page: {
         background: "#f5f6fa",
@@ -110,7 +105,6 @@ const styles = {
     headerLeft: { fontWeight: "bold" },
     headerRight: { fontWeight: "bold" },
 
-    /* === CENTRAR TODO === */
     container: {
         flex: 1,
         display: "flex",
@@ -119,7 +113,6 @@ const styles = {
         paddingBottom: "60px",
     },
 
-    /* === TARJETA AZUL === */
     card: {
         background: "rgba(0, 119, 182, 0.92)",
         padding: "35px",

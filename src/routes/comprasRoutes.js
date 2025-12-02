@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const { Compra } = require("../models/collections");
 
-// Registrar varias compras (carrito completo)
 router.post("/", async (req, res) => {
     try {
         const { codigo_cpr, compras } = req.body;
@@ -19,12 +18,8 @@ router.post("/", async (req, res) => {
                 codigo_cpr,
                 precio_kilo_final: c.precio_kilo_final,
                 precio_total: c.precio_total,
-                
-                // --- AQUI GUARDAMOS LO NUEVO ---
                 kilos: c.kilos,
-                nombre_especie: c.nombre, // Viene del UserPanel como 'nombre'
-                // -------------------------------
-                
+                nombre_especie: c.nombre,
                 fecha: new Date()
             });
 
@@ -35,12 +30,10 @@ router.post("/", async (req, res) => {
         res.json({ mensaje: "Pedido registrado correctamente", compras: guardadas });
 
     } catch (error) {
-        console.error(error);
         res.status(500).json({ error: "Error al registrar compra" });
     }
 });
 
-// Historial por comprador
 router.get("/:codigo", async (req, res) => {
     try {
         const compras = await Compra.find({ codigo_cpr: req.params.codigo });

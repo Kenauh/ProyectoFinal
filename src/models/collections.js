@@ -1,8 +1,5 @@
 const mongoose = require("mongoose");
 
-/* ============================
-   USUARIOS
-============================ */
 const UserSchema = new mongoose.Schema({
   nombre: { type: String, required: true },
   correo: { type: String, required: true, unique: true },
@@ -11,9 +8,6 @@ const UserSchema = new mongoose.Schema({
 });
 const User = mongoose.model("User", UserSchema);
 
-/* ============================
-   COMPRADORES
-============================ */
 const CompradorSchema = new mongoose.Schema({
   codigo_cpr: { type: Number, required: true, unique: true },
   nombre: String,
@@ -24,9 +18,6 @@ const CompradorSchema = new mongoose.Schema({
 });
 const Comprador = mongoose.model("Comprador", CompradorSchema);
 
-/* ============================
-   LOTES
-============================ */
 const LoteSchema = new mongoose.Schema({
   id_lte: { type: Number, required: true, unique: true },
   kilos: Number,
@@ -36,18 +27,12 @@ const LoteSchema = new mongoose.Schema({
 });
 const Lote = mongoose.model("Lote", LoteSchema);
 
-/* ============================
-   TIPOS
-============================ */
 const TipoSchema = new mongoose.Schema({
   id_tpo: { type: Number, required: true, unique: true },
   nombre: String
 });
 const Tipo = mongoose.model("Tipo", TipoSchema);
 
-/* ============================
-   ESPECIES
-============================ */
 const EspecieSchema = new mongoose.Schema({
   id_epe: { type: Number, required: true, unique: true },
   nombre: String,
@@ -57,9 +42,6 @@ const EspecieSchema = new mongoose.Schema({
 });
 const Especie = mongoose.model("Especie", EspecieSchema);
 
-/* ============================
-   COMPRAS
-============================ */
 const CompraSchema = new mongoose.Schema({
   id_cmp: { type: Number, required: true, unique: true },
   codigo_cpr: { type: Number, ref: "Comprador", required: true },
@@ -67,14 +49,8 @@ const CompraSchema = new mongoose.Schema({
   precio_total: Number,
   kilos: Number,
   nombre_especie: String,
-
-
   fecha: Date
 });
 const Compra = mongoose.model("Compra", CompraSchema);
 
-module.exports = { User, Comprador, Lote, Tipo, Especie, Compra };
-/* ============================
-   EXPORTAR
-============================ */
 module.exports = { User, Comprador, Lote, Tipo, Especie, Compra };

@@ -46,7 +46,6 @@ function Register() {
                 <strong style={styles.headerRight}>SISTEMA LONJA ⚓</strong>
             </header>
 
-            {/* === CONTENEDOR CENTRADO === */}
             <div style={styles.container}>
                 <div style={styles.card}>
                     <h2 style={styles.title}>Crear cuenta</h2>
@@ -56,7 +55,6 @@ function Register() {
                         <input name="apellido_paterno" placeholder="Apellido paterno" onChange={handleChange} style={styles.input} required />
                         <input name="apellido_materno" placeholder="Apellido materno" onChange={handleChange} style={styles.input} required />
                         <input name="direccion" placeholder="Dirección" onChange={handleChange} style={styles.input} required />
-
                         <input name="correo" type="email" placeholder="Correo" onChange={handleChange} style={styles.input} required />
                         <input name="contraseña" type="password" placeholder="Contraseña" onChange={handleChange} style={styles.input} required />
 
@@ -95,7 +93,6 @@ const styles = {
     headerLeft: { fontWeight: "bold" },
     headerRight: { fontWeight: "bold" },
 
-    /* === CENTRAR VERTICAL + HORIZONTAL === */
     container: {
         flex: 1,
         display: "flex",
@@ -104,7 +101,6 @@ const styles = {
         paddingBottom: "60px"
     },
 
-    /* === TARJETA AZUL === */
     card: {
         background: "rgba(0, 119, 182, 0.92)",
         padding: "35px",
@@ -118,7 +114,7 @@ const styles = {
         textAlign: "center",
         marginBottom: 20,
         fontSize: "24px",
-        fontWeight: "bold",
+        fontWeight: "bold"
     },
 
     form: {
